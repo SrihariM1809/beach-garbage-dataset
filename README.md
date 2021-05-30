@@ -2,11 +2,11 @@
 Repository containing annotations and helper scripts for Beach Garbage Dataset in kaggle
 
 * Real Data
-  -The below link will be redirected to the Real Beach Data and Synthetic Data generated using RPO
+  - The below link will be redirected to the Real Beach Data and Synthetic Data generated using RPO
     -[Kaggle Dataset](https://www.kaggle.com/vigneshdesmond/beach-garbage-detection)
 * Trash Cluster Data
   
-  -The below link will be redirected to the Synthetic Data generated using TCG
+  - The below link will be redirected to the Synthetic Data generated using TCG
     -[Kaggle Dataset](https://www.kaggle.com/vigneshdesmond/beach-garbage-dataset-2)
    
   
