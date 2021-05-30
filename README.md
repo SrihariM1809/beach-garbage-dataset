@@ -1,4 +1,4 @@
-# beach-garbage-dataset
+# Beach-Garbage-Dataset
 Repository containing annotations and helper scripts for Beach Garbage Dataset in kaggle
 
 [Kaggle Dataset](https://www.kaggle.com/vigneshdesmond/beach-garbage-detection)
