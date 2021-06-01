@@ -4,6 +4,7 @@
 import os
 import glob
 import random
+from typing import Counter
 import numpy as np
 from PIL import Image
 from tqdm import tqdm
@@ -58,34 +59,6 @@ def compose(index, foregrounds, background):
     return background, t_x_list, t_y_list
 
 
-# def compose2(index, foregrounds, background):
-#     bg_w, bg_h = background.shape[:2]
-#     t_x_list = []
-#     t_y_list = []
-
-#     for i in range(len(foregrounds)):
-#         # current_foreground = (foregrounds[i] * 255).astype(np.uint8)
-#         current_foreground = np.uint8(foregrounds[i] * 255)
-#         img_w, img_h = current_foreground.shape[:2]
-#         t_x = np.random.randint(0, int(bg_w / 2))
-#         t_y = np.random.randint(0, int(bg_h / 2))
-
-#         t_x_list.append(t_x)
-#         t_y_list.append(t_y)
-#         alpha_s = current_foreground[:, :, 3] / 255.0
-#         alpha_l = 1.0 - alpha_s
-#         composed_background = np.copy(background)
-
-#         for c in range(0, 3):
-#             composed_background[t_y : t_y + img_w, t_x : t_x + img_h, c] = (
-#                 alpha_s * current_foreground[:, :, c]
-#                 + alpha_l * background[t_y : t_y + img_w, t_x : t_x + img_h, c]
-#             )
-#     background_pil = Image.fromarray(background)
-#     background_pil.save(f"./synth_images/img_{index}.jpeg")
-#     return t_x_list, t_y_list
-
-
 def getForegroundMask(
     index, foregrounds, background, background_mask, classes_list, t_x_list, t_y_list
 ):
@@ -126,6 +99,8 @@ def generator(index, background, background_mask, foreground_full_list):
     foreground_list = random.sample(foreground_full_list, random.randint(cluster_low_limit, cluster_high_limit))
     classes_list = [x.rsplit("/", 2)[-2][-1] for x in foreground_list]
     classes_list = [int(i) for i in classes_list]
+    f = Counter(classes_list)
+    return 1, f
 
     foregrounds = []
     for i in foreground_list:
@@ -155,9 +130,9 @@ def generator(index, background, background_mask, foreground_full_list):
             vmax=7,
             cmap=cmp,
         )
-        return 1
+        return 1, f
     except:
-        return 0
+        return 0, f
 
 
 background_list = sorted(glob.glob(os.getcwd() + "/backgrounds-only/*"))
@@ -182,9 +157,13 @@ for folder in folders_list:
 
 pbar = tqdm(range(len(background_list)), desc="description")
 count = 0
+dist = Counter()
 
 for index in pbar:
     background = np.asarray(Image.open(background_list[index]))
     background_mask = np.asarray(Image.open(background_labels_list[index]))
-    count += generator(index, background, background_mask, foreground_full_list)
+    curr_count, curr_dist = generator(index, background, background_mask, foreground_full_list)
+    count += curr_count
+    dist += curr_dist
     pbar.set_description("Generated: %d" % count)
+print(dist)

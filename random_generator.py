@@ -111,7 +111,7 @@ def getForegroundMask(
 def generator(index, background, background_mask, foreground_full_list):
     foreground_list = random.sample(foreground_full_list, random.randint(4, 9))
     classes_list = [x.rsplit("/", 2)[-2][-1] for x in foreground_list]
-    classes_list = results = [int(i) for i in classes_list]
+    classes_list = [int(i) for i in classes_list]
 
     foregrounds = []
     for i in foreground_list:
